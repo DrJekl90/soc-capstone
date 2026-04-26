@@ -1,0 +1,44 @@
+// Token Replay Detection
+// MITRE ATT&CK: T1550.001 - Use Alternate Authentication Material: Application Access Token
+// Identifies sessions where a token is used from a different IP or device
+// than the one that originally authenticated, suggesting token theft.
+
+let Lookback = 24h;
+
+SigninLogs
+| where TimeGenerated > ago(Lookback)
+| where ResultType == "0"
+| where isnotempty(DeviceDetail.deviceId) or isnotempty(DeviceDetail.operatingSystem)
+| extend
+    DeviceOS = tostring(DeviceDetail.operatingSystem),
+    Browser = tostring(DeviceDetail.browser),
+    DeviceId = tostring(DeviceDetail.deviceId),
+    City = tostring(LocationDetails.city),
+    Country = tostring(LocationDetails.countryOrRegion),
+    TokenIssuerType = tostring(AuthenticationDetails[0].authenticationMethod)
+| summarize
+    DistinctIPs = dcount(IPAddress),
+    DistinctCities = dcount(City),
+    DistinctDeviceOSes = dcount(DeviceOS),
+    IPList = make_set(IPAddress, 10),
+    CityList = make_set(City, 10),
+    OSList = make_set(DeviceOS, 5),
+    SessionCount = count(),
+    FirstSeen = min(TimeGenerated),
+    LastSeen = max(TimeGenerated)
+    by UserPrincipalName, AppDisplayName, CorrelationId
+| where DistinctIPs > 1 or DistinctCities > 1
+| where DistinctDeviceOSes >= 1
+| project
+    UserPrincipalName,
+    AppDisplayName,
+    CorrelationId,
+    DistinctIPs,
+    DistinctCities,
+    IPList,
+    CityList,
+    OSList,
+    SessionCount,
+    FirstSeen,
+    LastSeen
+| order by DistinctIPs desc

@@ -1,0 +1,41 @@
+// OAuth Consent Phishing Detection
+// MITRE ATT&CK: T1550.001 - Use Alternate Authentication Material: Application Access Token
+// Detects suspicious OAuth application consent grants, particularly apps
+// requesting high-privilege scopes from non-admin users.
+
+let Lookback = 7d;
+
+let SensitiveScopes = dynamic([
+    "Mail.ReadWrite", "Mail.ReadWrite.All", "Mail.Send",
+    "Files.ReadWrite.All", "Directory.ReadWrite.All",
+    "User.ReadWrite.All", "MailboxSettings.ReadWrite"
+]);
+
+AuditLogs
+| where TimeGenerated > ago(Lookback)
+| where OperationName == "Consent to application"
+| extend
+    AppName = tostring(TargetResources[0].displayName),
+    AppId = tostring(TargetResources[0].id),
+    ConsentUser = tostring(InitiatedBy.user.userPrincipalName),
+    ConsentIP = tostring(InitiatedBy.user.ipAddress),
+    Permissions = tostring(AdditionalDetails[0].value)
+| where isnotempty(Permissions)
+| extend PermissionList = split(Permissions, " ")
+| mv-expand PermissionList to typeof(string)
+| where PermissionList in (SensitiveScopes)
+| summarize
+    SensitiveScopesGranted = make_set(PermissionList),
+    ScopeCount = dcount(PermissionList),
+    ConsentTime = min(TimeGenerated)
+    by AppName, AppId, ConsentUser, ConsentIP
+| where ScopeCount >= 2
+| project
+    ConsentTime,
+    ConsentUser,
+    ConsentIP,
+    AppName,
+    AppId,
+    SensitiveScopesGranted,
+    ScopeCount
+| order by ScopeCount desc

@@ -1,0 +1,59 @@
+<!--
+  Web Shell Detection Rules
+  MITRE ATT&CK: T1505.003 - Server Software Component: Web Shell
+  Rule IDs: 100130-100133
+  Deploy to: /var/ossec/etc/rules/local_rules.xml
+  Requires Sysmon or auditd forwarding from web servers.
+-->
+
+<group name="local,web_shell,persistence,">
+
+  <!-- Web server process spawning a command shell -->
+  <rule id="100130" level="14">
+    <if_sid>61600</if_sid>
+    <regex>ParentImage.*(?:w3wp|httpd|nginx|apache2|tomcat)</regex>
+    <regex>Image.*(?:cmd\.exe|powershell|bash|sh)</regex>
+    <description>Web server spawned command shell - possible web shell execution</description>
+    <mitre>
+      <id>T1505.003</id>
+    </mitre>
+    <group>web_shell,critical,</group>
+  </rule>
+
+  <!-- File creation in web root directories -->
+  <rule id="100131" level="10">
+    <if_sid>554</if_sid>
+    <regex>(?:\/var\/www\/|\/inetpub\/wwwroot\/|\/opt\/lampp\/htdocs\/)</regex>
+    <regex>\.(?:php|asp|aspx|jsp|jspx)$</regex>
+    <description>Script file created in web root - possible web shell drop</description>
+    <mitre>
+      <id>T1505.003</id>
+    </mitre>
+    <group>web_shell,file_creation,</group>
+  </rule>
+
+  <!-- Suspicious network utility from web server process -->
+  <rule id="100132" level="12">
+    <if_sid>61600</if_sid>
+    <regex>ParentImage.*(?:w3wp|httpd|nginx|apache2)</regex>
+    <regex>Image.*(?:whoami|net\.exe|ipconfig|ifconfig|wget|curl|certutil)</regex>
+    <description>Web server child process running recon/download tool</description>
+    <mitre>
+      <id>T1505.003</id>
+    </mitre>
+    <group>web_shell,recon,</group>
+  </rule>
+
+  <!-- PHP/ASP file with suspicious naming patterns -->
+  <rule id="100133" level="8">
+    <if_sid>554</if_sid>
+    <regex>(?:\/var\/www\/|\/inetpub\/wwwroot\/)</regex>
+    <regex>(?:shell|cmd|eval|upload|backdoor|c99|r57|wso)\.\w+$</regex>
+    <description>File with suspicious name created in web directory</description>
+    <mitre>
+      <id>T1505.003</id>
+    </mitre>
+    <group>web_shell,naming,</group>
+  </rule>
+
+</group>

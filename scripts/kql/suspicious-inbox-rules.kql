@@ -1,0 +1,30 @@
+// Suspicious Inbox Rule Detection
+// MITRE ATT&CK: T1114.003 - Email Collection: Email Forwarding Rule
+// Catches mailbox rules that forward or redirect mail to external addresses,
+// a common persistence technique after mailbox compromise.
+
+let Lookback = 7d;
+let InternalDomain = "orangecat.com";
+
+OfficeActivity
+| where TimeGenerated > ago(Lookback)
+| where Operation in ("New-InboxRule", "Set-InboxRule")
+| extend RuleParams = tostring(Parameters)
+| where RuleParams has "ForwardTo"
+    or RuleParams has "RedirectTo"
+    or RuleParams has "ForwardAsAttachmentTo"
+| where RuleParams !has InternalDomain
+| extend
+    RuleName = extract("Name\":\"([^\"]+)", 1, RuleParams),
+    ForwardTarget = extract("(ForwardTo|RedirectTo|ForwardAsAttachmentTo)\":\"([^\"]+)", 2, RuleParams),
+    DeleteMessage = RuleParams has "\"DeleteMessage\":\"True\""
+| project
+    TimeGenerated,
+    UserId,
+    Operation,
+    RuleName,
+    ForwardTarget,
+    DeleteMessage,
+    ClientIP,
+    RuleParams
+| order by TimeGenerated desc

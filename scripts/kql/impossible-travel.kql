@@ -1,0 +1,44 @@
+// Impossible Travel Detection
+// MITRE ATT&CK: T1078 - Valid Accounts (Initial Access)
+// Flags users authenticating from multiple distant cities within a window
+// that makes physical travel implausible.
+
+let LookbackWindow = 1h;
+let MaxRealisticSpeedKmh = 800;
+
+SigninLogs
+| where TimeGenerated > ago(LookbackWindow)
+| where ResultType == "0"
+| where isnotempty(LocationDetails.city)
+| extend
+    City = tostring(LocationDetails.city),
+    State = tostring(LocationDetails.state),
+    Country = tostring(LocationDetails.countryOrRegion),
+    Latitude = toreal(LocationDetails.geoCoordinates.latitude),
+    Longitude = toreal(LocationDetails.geoCoordinates.longitude)
+| sort by UserPrincipalName asc, TimeGenerated asc
+| serialize
+| extend
+    PrevLat = prev(Latitude),
+    PrevLon = prev(Longitude),
+    PrevTime = prev(TimeGenerated),
+    PrevCity = prev(City),
+    PrevUser = prev(UserPrincipalName)
+| where UserPrincipalName == PrevUser
+| where isnotnull(PrevLat) and isnotnull(PrevLon)
+| extend
+    DistanceKm = geo_distance_2points(Longitude, Latitude, PrevLon, PrevLat) / 1000.0,
+    TimeDiffHours = datetime_diff('second', TimeGenerated, PrevTime) / 3600.0
+| where TimeDiffHours > 0
+| extend RequiredSpeedKmh = round(DistanceKm / TimeDiffHours, 0)
+| where RequiredSpeedKmh > MaxRealisticSpeedKmh
+| project
+    TimeGenerated,
+    UserPrincipalName,
+    FromCity = PrevCity,
+    ToCity = City,
+    DistanceKm = round(DistanceKm, 0),
+    TimeDiffMinutes = round(TimeDiffHours * 60, 0),
+    RequiredSpeedKmh,
+    IPAddress
+| order by RequiredSpeedKmh desc

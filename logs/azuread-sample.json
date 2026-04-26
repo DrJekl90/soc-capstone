@@ -1,0 +1,50 @@
+[
+  {
+    "TimeGenerated": "2026-04-20T08:14:22Z",
+    "userPrincipalName": "d.martinez@orangecat.com",
+    "appDisplayName": "Microsoft Office 365 Portal",
+    "ipAddress": "198.51.100.34",
+    "status": {"errorCode": 0, "failureReason": null},
+    "location": {"city": "Dallas", "state": "Texas", "countryOrRegion": "US"},
+    "deviceDetail": {"operatingSystem": "Windows 11", "browser": "Edge 124", "displayName": "WKS-DMZ-014", "deviceId": "a3e9f1b2-4c5d-4e6f-8a7b-1c2d3e4f5a6b"},
+    "riskLevelDuringSignIn": "none",
+    "conditionalAccessStatus": "success",
+    "authenticationRequirement": "singleFactorAuthentication"
+  },
+  {
+    "TimeGenerated": "2026-04-20T08:17:05Z",
+    "userPrincipalName": "d.martinez@orangecat.com",
+    "appDisplayName": "Microsoft Office 365 Portal",
+    "ipAddress": "203.0.113.88",
+    "status": {"errorCode": 0, "failureReason": null},
+    "location": {"city": "Singapore", "state": "Singapore", "countryOrRegion": "SG"},
+    "deviceDetail": {"operatingSystem": "macOS 14", "browser": "Chrome 123", "displayName": null, "deviceId": null},
+    "riskLevelDuringSignIn": "high",
+    "conditionalAccessStatus": "success",
+    "authenticationRequirement": "multiFactorAuthentication"
+  },
+  {
+    "TimeGenerated": "2026-04-20T09:45:33Z",
+    "userPrincipalName": "r.chen@orangecat.com",
+    "appDisplayName": "Azure Portal",
+    "ipAddress": "192.0.2.17",
+    "status": {"errorCode": 50076, "failureReason": "MFA required but not completed"},
+    "location": {"city": "Chicago", "state": "Illinois", "countryOrRegion": "US"},
+    "deviceDetail": {"operatingSystem": "Windows 10", "browser": "Firefox 125", "displayName": "WKS-CHI-008", "deviceId": "b4f0a2c3-5d6e-4f7a-9b8c-2d3e4f5a6b7c"},
+    "riskLevelDuringSignIn": "medium",
+    "conditionalAccessStatus": "failure",
+    "authenticationRequirement": "multiFactorAuthentication"
+  },
+  {
+    "TimeGenerated": "2026-04-20T12:03:19Z",
+    "userPrincipalName": "j.patel@orangecat.com",
+    "appDisplayName": "Microsoft Teams",
+    "ipAddress": "198.51.100.202",
+    "status": {"errorCode": 0, "failureReason": null},
+    "location": {"city": "Austin", "state": "Texas", "countryOrRegion": "US"},
+    "deviceDetail": {"operatingSystem": "iOS 17", "browser": "Mobile Safari", "displayName": "iPhone-JPatel", "deviceId": "c5a1b3d4-6e7f-4a8b-0c9d-3e4f5a6b7c8d"},
+    "riskLevelDuringSignIn": "none",
+    "conditionalAccessStatus": "success",
+    "authenticationRequirement": "multiFactorAuthentication"
+  }
+]

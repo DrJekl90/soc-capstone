@@ -1,0 +1,54 @@
+<!--
+  Suspicious PowerShell Execution Detection
+  MITRE ATT&CK: T1059.001 - Command and Scripting Interpreter: PowerShell
+  Rule IDs: 100110-100113
+  Deploy to: /var/ossec/etc/rules/local_rules.xml
+-->
+
+<group name="local,powershell,execution,">
+
+  <!-- Encoded command execution - common obfuscation technique -->
+  <rule id="100110" level="12">
+    <if_sid>61600</if_sid>
+    <match>-EncodedCommand|--enc |/enc </match>
+    <description>PowerShell executed with encoded command - possible obfuscation</description>
+    <mitre>
+      <id>T1059.001</id>
+    </mitre>
+    <group>obfuscation,</group>
+  </rule>
+
+  <!-- Download cradle patterns: IEX, Invoke-WebRequest, Net.WebClient -->
+  <rule id="100111" level="12">
+    <if_sid>61600</if_sid>
+    <regex>Invoke-Expression|IEX |Invoke-WebRequest|Net\.WebClient|DownloadString|DownloadFile</regex>
+    <description>PowerShell download cradle detected - possible payload staging</description>
+    <mitre>
+      <id>T1059.001</id>
+    </mitre>
+    <group>download_cradle,</group>
+  </rule>
+
+  <!-- Execution policy bypass -->
+  <rule id="100112" level="10">
+    <if_sid>61600</if_sid>
+    <match>-ExecutionPolicy Bypass|-ep bypass|Set-ExecutionPolicy Unrestricted</match>
+    <description>PowerShell execution policy bypass detected</description>
+    <mitre>
+      <id>T1059.001</id>
+    </mitre>
+    <group>policy_bypass,</group>
+  </rule>
+
+  <!-- AMSI bypass attempt -->
+  <rule id="100113" level="14">
+    <if_sid>61600</if_sid>
+    <regex>AmsiUtils|amsiInitFailed|Reflection\.Assembly|SetValue.*amsi</regex>
+    <description>Potential AMSI bypass in PowerShell - high confidence malicious</description>
+    <mitre>
+      <id>T1562.001</id>
+    </mitre>
+    <group>defense_evasion,amsi_bypass,</group>
+  </rule>
+
+</group>

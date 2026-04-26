@@ -1,0 +1,36 @@
+// MFA Fatigue / Push Bombing Detection
+// MITRE ATT&CK: T1621 - Multi-Factor Authentication Request Generation
+// Detects repeated MFA failures from one user followed by a success,
+// indicating the user may have approved a fraudulent push prompt.
+
+let Lookback = 30m;
+let MfaFailureThreshold = 5;
+
+let MfaFailureCodes = dynamic(["50074", "50076", "500121"]);
+
+SigninLogs
+| where TimeGenerated > ago(Lookback)
+| where ResultType in (MfaFailureCodes) or ResultType == "0"
+| summarize
+    MfaFailures = countif(ResultType in (MfaFailureCodes)),
+    Successes = countif(ResultType == "0"),
+    DistinctIPs = dcount(IPAddress),
+    IPList = make_set(IPAddress, 10),
+    Apps = make_set(AppDisplayName, 5),
+    FirstEvent = min(TimeGenerated),
+    LastEvent = max(TimeGenerated)
+    by UserPrincipalName
+| where MfaFailures >= MfaFailureThreshold and Successes >= 1
+| extend WindowMinutes = datetime_diff('minute', LastEvent, FirstEvent)
+| where WindowMinutes <= 15
+| project
+    UserPrincipalName,
+    MfaFailures,
+    Successes,
+    WindowMinutes,
+    DistinctIPs,
+    IPList,
+    Apps,
+    FirstEvent,
+    LastEvent
+| order by MfaFailures desc

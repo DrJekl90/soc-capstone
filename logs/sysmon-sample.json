@@ -1,0 +1,53 @@
+[
+  {
+    "EventID": 1,
+    "UtcTime": "2026-04-20T14:22:08.431Z",
+    "Computer": "WKS-DMZ-014.orangecat.local",
+    "User": "ORANGECAT\\d.martinez",
+    "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "CommandLine": "powershell.exe -ExecutionPolicy Bypass -File C:\\Temp\\update-config.ps1",
+    "ParentImage": "C:\\Windows\\explorer.exe",
+    "ParentCommandLine": "C:\\Windows\\explorer.exe",
+    "Hashes": "SHA256=9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08",
+    "SourceIp": null,
+    "DestinationIp": null,
+    "LogonId": "0x3E7"
+  },
+  {
+    "EventID": 3,
+    "UtcTime": "2026-04-20T14:22:12.117Z",
+    "Computer": "WKS-DMZ-014.orangecat.local",
+    "User": "ORANGECAT\\d.martinez",
+    "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "SourceIp": "10.10.5.22",
+    "SourcePort": 49832,
+    "DestinationIp": "203.0.113.55",
+    "DestinationPort": 443,
+    "Protocol": "tcp",
+    "DestinationHostname": "raw.githubusercontent.com"
+  },
+  {
+    "EventID": 11,
+    "UtcTime": "2026-04-20T14:22:14.890Z",
+    "Computer": "WKS-DMZ-014.orangecat.local",
+    "User": "ORANGECAT\\d.martinez",
+    "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "TargetFilename": "C:\\Temp\\payload.dll",
+    "CreationUtcTime": "2026-04-20T14:22:14.890Z",
+    "Hashes": "SHA256=3A7BD3E2360A3D29EEA436FCFB7E44C735D117C42D1C1835420B6B9942DD4F1B"
+  },
+  {
+    "EventID": 1,
+    "UtcTime": "2026-04-20T15:01:44.003Z",
+    "Computer": "SRV-APP-002.orangecat.local",
+    "User": "ORANGECAT\\svc_backup",
+    "Image": "C:\\Windows\\System32\\cmd.exe",
+    "CommandLine": "cmd.exe /c whoami /priv",
+    "ParentImage": "C:\\Windows\\System32\\svchost.exe",
+    "ParentCommandLine": "C:\\Windows\\System32\\svchost.exe -k netsvcs",
+    "Hashes": "SHA256=B94F3E31F0A29E4B8F2EEBF4C5E7F2A3D8B6C1E9F0A2B4D6E8F1A3C5D7E9F1B3",
+    "SourceIp": null,
+    "DestinationIp": null,
+    "LogonId": "0x3E4"
+  }
+]

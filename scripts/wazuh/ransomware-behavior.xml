@@ -1,0 +1,55 @@
+<!--
+  Ransomware Behavior Detection Rules
+  MITRE ATT&CK: T1486 - Data Encrypted for Impact
+  Rule IDs: 100140-100143
+  Deploy to: /var/ossec/etc/rules/local_rules.xml
+  These detect behavioral patterns, not specific ransomware families.
+-->
+
+<group name="local,ransomware,impact,">
+
+  <!-- Mass file rename with known ransomware extensions -->
+  <rule id="100140" level="14" frequency="15" timeframe="60">
+    <if_sid>554</if_sid>
+    <regex>\.(?:locked|encrypted|crypt|enc|pay|ransom|wncry|cerber|locky|zepto)</regex>
+    <description>Mass file rename with ransomware-style extension (15+ in 60s)</description>
+    <mitre>
+      <id>T1486</id>
+    </mitre>
+    <group>ransomware,encryption,critical,</group>
+  </rule>
+
+  <!-- Ransom note file creation -->
+  <rule id="100141" level="13">
+    <if_sid>554</if_sid>
+    <regex>(?:README_TO_DECRYPT|DECRYPT_INSTRUCTIONS|HOW_TO_RECOVER|RANSOM_NOTE|RESTORE_FILES)</regex>
+    <description>Ransom note file detected - active ransomware encryption likely</description>
+    <mitre>
+      <id>T1486</id>
+    </mitre>
+    <group>ransomware,ransom_note,critical,</group>
+  </rule>
+
+  <!-- Volume shadow copy deletion (vssadmin or wmic) -->
+  <rule id="100142" level="14">
+    <if_sid>61600</if_sid>
+    <regex>(?:vssadmin.*delete.*shadows|wmic.*shadowcopy.*delete|bcdedit.*recoveryenabled.*no)</regex>
+    <description>Shadow copy deletion or recovery disabled - ransomware preparation</description>
+    <mitre>
+      <id>T1490</id>
+    </mitre>
+    <group>ransomware,inhibit_recovery,critical,</group>
+  </rule>
+
+  <!-- Rapid file modification across multiple directories -->
+  <rule id="100143" level="12" frequency="50" timeframe="30">
+    <if_sid>554</if_sid>
+    <same_source_ip />
+    <description>50+ file modifications in 30s from same source - possible encryption in progress</description>
+    <mitre>
+      <id>T1486</id>
+    </mitre>
+    <group>ransomware,mass_modification,</group>
+  </rule>
+
+</group>

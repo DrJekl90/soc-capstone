@@ -1,0 +1,40 @@
+// Suspicious Service Principal Activity
+// MITRE ATT&CK: T1078.004 - Valid Accounts: Cloud Accounts
+// Monitors for service principals performing actions outside their
+// normal behavioral baseline, such as new API calls, unusual hours,
+// or access from unexpected IPs.
+
+let Lookback = 24h;
+
+AADServicePrincipalSignInLogs
+| where TimeGenerated > ago(Lookback)
+| extend
+    AppName = ServicePrincipalName,
+    SPId = ServicePrincipalId,
+    SourceIP = IPAddress,
+    ResourceAccessed = ResourceDisplayName
+| summarize
+    DistinctResources = dcount(ResourceAccessed),
+    ResourceList = make_set(ResourceAccessed, 10),
+    DistinctIPs = dcount(SourceIP),
+    IPList = make_set(SourceIP, 10),
+    SignInCount = count(),
+    FailureCount = countif(ResultType != "0"),
+    FirstSeen = min(TimeGenerated),
+    LastSeen = max(TimeGenerated)
+    by AppName, SPId
+| where DistinctResources > 3 or DistinctIPs > 2 or FailureCount > 5
+| extend FailureRate = round(toreal(FailureCount) / toreal(SignInCount) * 100, 1)
+| project
+    AppName,
+    SPId,
+    SignInCount,
+    FailureCount,
+    FailureRate,
+    DistinctResources,
+    ResourceList,
+    DistinctIPs,
+    IPList,
+    FirstSeen,
+    LastSeen
+| order by DistinctResources desc

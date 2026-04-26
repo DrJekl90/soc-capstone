@@ -1,0 +1,39 @@
+// Mass File Download / Data Exfiltration Detection
+// MITRE ATT&CK: T1530 - Data from Cloud Storage Object
+// Flags users downloading an abnormal volume of files from SharePoint
+// or OneDrive in a short window, which may indicate data staging
+// before exfiltration.
+
+let Lookback = 1h;
+let DownloadThreshold = 50;
+
+OfficeActivity
+| where TimeGenerated > ago(Lookback)
+| where Operation in ("FileDownloaded", "FileSyncDownloadedFull")
+| where OfficeWorkload in ("SharePoint", "OneDrive")
+| summarize
+    FileCount = count(),
+    DistinctFiles = dcount(OfficeObjectId),
+    DistinctSites = dcount(Site_),
+    SiteList = make_set(Site_, 10),
+    FileExtensions = make_set(tostring(extract("\\.(\\w+)$", 1, SourceFileName)), 10),
+    FirstDownload = min(TimeGenerated),
+    LastDownload = max(TimeGenerated),
+    TotalSizeBytes = sum(toint(OfficeObjectId))
+    by UserId, ClientIP
+| where FileCount >= DownloadThreshold
+| extend WindowMinutes = datetime_diff('minute', LastDownload, FirstDownload)
+| extend FilesPerMinute = iff(WindowMinutes > 0, round(toreal(FileCount) / toreal(WindowMinutes), 1), toreal(FileCount))
+| project
+    UserId,
+    ClientIP,
+    FileCount,
+    DistinctFiles,
+    DistinctSites,
+    SiteList,
+    FileExtensions,
+    FilesPerMinute,
+    WindowMinutes,
+    FirstDownload,
+    LastDownload
+| order by FileCount desc

@@ -1,0 +1,39 @@
+// Privilege Escalation via Azure AD Role Assignment
+// MITRE ATT&CK: T1078.004 - Valid Accounts: Cloud Accounts
+// Alerts when a user is assigned a privileged Azure AD role,
+// especially if the assigning principal is not a known admin.
+
+let Lookback = 24h;
+
+let PrivilegedRoles = dynamic([
+    "Global Administrator",
+    "Privileged Role Administrator",
+    "Exchange Administrator",
+    "SharePoint Administrator",
+    "Security Administrator",
+    "User Administrator",
+    "Application Administrator",
+    "Cloud Application Administrator",
+    "Conditional Access Administrator"
+]);
+
+AuditLogs
+| where TimeGenerated > ago(Lookback)
+| where OperationName == "Add member to role"
+| extend
+    TargetUser = tostring(TargetResources[0].userPrincipalName),
+    RoleName = tostring(TargetResources[0].displayName),
+    AssignedBy = tostring(InitiatedBy.user.userPrincipalName),
+    AssignedByIP = tostring(InitiatedBy.user.ipAddress),
+    AssignedByApp = tostring(InitiatedBy.app.displayName)
+| where RoleName in (PrivilegedRoles)
+| project
+    TimeGenerated,
+    TargetUser,
+    RoleName,
+    AssignedBy,
+    AssignedByIP,
+    AssignedByApp,
+    OperationName,
+    Result
+| order by TimeGenerated desc
