@@ -1,62 +1,101 @@
-# SOC Capstone - Cloud Identity Threat Detection
+<div align="center">
 
-![SOC Analyst](https://img.shields.io/badge/SOC-Analyst-2D2D2D?style=flat-square&labelColor=B00020)
-![MITRE ATT&CK](https://img.shields.io/badge/MITRE-ATT%26CK-2D2D2D?style=flat-square&labelColor=B00020)
-![KQL](https://img.shields.io/badge/KQL-Detection-2D2D2D?style=flat-square&labelColor=3A3A3A)
-![Wazuh](https://img.shields.io/badge/Wazuh-HIDS-2D2D2D?style=flat-square&labelColor=3A3A3A)
-![Python](https://img.shields.io/badge/Python-Enrichment-2D2D2D?style=flat-square&labelColor=3A3A3A)
-![PowerShell](https://img.shields.io/badge/PowerShell-Automation-2D2D2D?style=flat-square&labelColor=3A3A3A)
-![Azure](https://img.shields.io/badge/Azure-Cloud-2D2D2D?style=flat-square&labelColor=3A3A3A)
-![Bash](https://img.shields.io/badge/Bash-CLI-2D2D2D?style=flat-square&labelColor=3A3A3A)
-![Linux](https://img.shields.io/badge/Linux-Endpoint-2D2D2D?style=flat-square&labelColor=3A3A3A)
-![Windows](https://img.shields.io/badge/Windows-Endpoint-2D2D2D?style=flat-square&labelColor=3A3A3A)
-![Zero Trust](https://img.shields.io/badge/Zero-Trust-2D2D2D?style=flat-square&labelColor=B00020)
-![Microsoft Sentinel](https://img.shields.io/badge/Microsoft-Sentinel-2D2D2D?style=flat-square&labelColor=3A3A3A)
-![GitHub](https://img.shields.io/badge/GitHub-Version_Control-2D2D2D?style=flat-square&labelColor=3A3A3A)
+# Hi, I'm Joe
+
+### SOC Engineer | Detection Engineer | Security Operations
+
+<img src="logo.png" width="220" alt="Neon Cat Logo">
+
+<br>
+
+<img src="banner.png" width="100%" alt="SOC Capstone Banner">
+
+</div>
 
 ---
 
-This project is a practical detection engineering capstone focused on identity-based threats in Azure AD environments. It covers the full lifecycle: threat research, detection rule development, enrichment scripting, SOC automation tooling, sample log generation, and MITRE ATT&CK mapping.
+## About Me
 
-The core deliverable is a set of ten KQL analytic rules built for Microsoft Sentinel, targeting attack patterns that SOC teams deal with regularly - impossible travel, MFA fatigue, token replay, OAuth consent phishing, privilege escalation, suspicious inbox rules, password spraying, mass file download, service principal abuse, and conditional access bypass. Each rule was written to be deployable in a production Sentinel workspace with minimal tuning.
+I build detection logic for production security operations. My focus is identity-based threat detection in cloud environments — writing KQL analytic rules for Microsoft Sentinel, developing custom Wazuh rules for endpoint coverage, and building enrichment scripts that give analysts the context they need to triage faster.
 
-On the endpoint side, five custom Wazuh rule sets cover SSH brute force correlation, suspicious PowerShell execution, Linux privilege escalation chains, web shell detection, and ransomware behavior patterns. Supporting the detection layer is a full automation toolkit: enrichment scripts for GeoIP resolution and IP reputation scoring, an IOC extractor for pulling indicators out of threat reports, a file hash reputation checker, an automated triage worksheet generator, and a lightweight Sigma-to-KQL converter. Additional hardening and incident response scripts round out the project with proactive defense capabilities. Every detection maps to a specific MITRE ATT&CK technique, and every script includes realistic sample logs for validation.
+I work within the MITRE ATT&CK framework because measurable coverage matters more than theoretical capability. Every detection I write maps to a technique, ships with documentation, and gets tested against realistic log data before deployment.
 
-## Tools & Technologies
+---
 
-| Category | Tools |
-|---|---|
-| SIEM | Microsoft Sentinel, Wazuh |
-| Query Language | Kusto Query Language (KQL) |
-| Scripting | Python 3, PowerShell 7, Bash |
-| Framework | MITRE ATT&CK |
-| Cloud Platform | Microsoft Azure, Azure AD |
-| Log Sources | Azure AD SigninLogs, AuditLogs, Sysmon |
-| Architecture | Zero Trust |
+## Skills & Tools
 
-## Repository Structure
+<div align="center">
 
-```
-docs/                  Architecture docs, workflow diagrams, assignment summary
-scripts/kql/           Ten KQL analytic rules for Microsoft Sentinel
-scripts/wazuh/         Five custom Wazuh detection rule sets
-scripts/enrichment/    GeoIP lookup, reputation check, log normalizer
-scripts/automation/    IOC extractor, hash lookup, triage helper, Sigma converter,
-                       AD security audit, firewall audit
-scripts/bash/          Linux hardening checker, process monitor, IR log collector
-logs/                  Realistic sample logs for testing detections
-research/              Notes and references from threat research phase
-```
+| Category              | Tools & Technologies |
+|-----------------------|----------------------|
+| **Detection**         | KQL, Microsoft Sentinel, Wazuh |
+| **Scripting**         | Python, PowerShell, Bash |
+| **Cloud & SIEM**      | Azure, Microsoft Sentinel |
+| **Frameworks**        | MITRE ATT&CK, Zero Trust |
+| **Endpoint**          | Linux, Windows, Sysmon |
 
-## Author
+</div>
 
-**Joseph Alsudani**
-SOC Engineer | Detection Engineer | Security Operations
+<div align="center">
 
-## Future Work
+![KQL](https://img.shields.io/badge/KQL-Detection-00E5FF?style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python)
+![PowerShell](https://img.shields.io/badge/PowerShell-7+-5391FE?style=for-the-badge&logo=powershell)
+![Azure](https://img.shields.io/badge/Azure-Cloud-0078D4?style=for-the-badge&logo=microsoftazure)
+![MITRE ATT&CK](https://img.shields.io/badge/MITRE-ATT%26CK-B00020?style=for-the-badge)
 
-- Integrate SOAR playbook triggers for automated response on high-confidence alerts
-- Add Sigma rule equivalents for cross-SIEM portability
-- Build a Sentinel workbook for visual triage of identity-based detections
-- Expand Wazuh ruleset to cover container escape and cloud API abuse
-- Develop automated testing pipeline for detection rule validation
+</div>
+
+---
+
+## Featured Project
+
+<div align="center">
+
+### [SOC Capstone](https://github.com/DrJekl90/soc-capstone) — Cloud Identity Threat Detection
+
+End-to-end detection engineering project targeting identity-based attacks in Azure AD.
+
+- 10 KQL analytic rules for Microsoft Sentinel
+- 5 custom Wazuh detection rules
+- Full automation and enrichment toolkit
+- All mapped to MITRE ATT&CK with realistic sample logs
+
+**Detections include:** Impossible Travel, MFA Fatigue, Token Replay, OAuth Consent Phishing, Privilege Escalation, Password Spraying, and more.
+
+</div>
+
+---
+
+## GitHub Stats
+
+<div align="center">
+
+<img src="https://github-readme-stats.vercel.app/api?username=DrJekl90&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" width="48%"/>
+<img src="https://github-readme-streak-stats.herokuapp.com/?user=DrJekl90&theme=tokyonight&hide_border=true" width="48%"/>
+
+<br><br>
+
+<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=DrJekl90&layout=compact&theme=tokyonight&hide_border=true&langs_count=8" width="60%"/>
+
+</div>
+
+---
+
+## Let's Connect
+
+<div align="center">
+
+[![GitHub](https://img.shields.io/badge/GitHub-DrJekl90-181717?style=for-the-badge&logo=github)](https://github.com/DrJekl90)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Joseph_Alsudani-0A66C2?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/joseph-alsudani)
+[![Email](https://img.shields.io/badge/Email-joseph.alsudani@protonmail.com-EA4335?style=for-the-badge&logo=gmail)](mailto:joseph.alsudani@protonmail.com)
+
+</div>
+
+---
+
+<div align="center">
+
+**Detection-first thinking. Operational realism. Documentation as a deliverable.**
+
+</div>
