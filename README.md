@@ -1,6 +1,6 @@
 <div align="center">
 
-# Hi, I'm Joe
+# Hi, I'm DrJekl90
 
 ### SOC Engineer | Detection Engineer | Security Operations
 
@@ -16,7 +16,7 @@
 
 ## About Me
 
-I build detection logic for production security operations. My focus is identity-based threat detection in cloud environments — writing KQL analytic rules for Microsoft Sentinel, developing custom Wazuh rules for endpoint coverage, and building enrichment scripts that give analysts the context they need to triage faster.
+I build detection logic for production security operations. My focus is identity-based threat detection in cloud environments. I write KQL analytic rules for Microsoft Sentinel, develop custom Wazuh rules for endpoint coverage, and build enrichment scripts that give analysts the context they need to triage faster.
 
 I work within the MITRE ATT&CK framework because measurable coverage matters more than theoretical capability. Every detection I write maps to a technique, ships with documentation, and gets tested against realistic log data before deployment.
 
@@ -52,7 +52,7 @@ I work within the MITRE ATT&CK framework because measurable coverage matters mor
 
 <div align="center">
 
-### [SOC Capstone](https://github.com/DrJekl90/soc-capstone) — Cloud Identity Threat Detection
+### [SOC Capstone](https://github.com/DrJekl90/soc-capstone) - Cloud Identity Threat Detection
 
 End-to-end detection engineering project targeting identity-based attacks in Azure AD.
 
