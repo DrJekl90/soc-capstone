@@ -31,4 +31,4 @@ or add meaningful documentation are welcome.
 
 ## Questions
 
-Open an issue or reach out at joseph.alsudani@protonmail.com.
+Open an issue or reach out at shalnark90@outlook.com
