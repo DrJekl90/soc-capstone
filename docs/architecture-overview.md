@@ -69,10 +69,31 @@ Four automation tools support SOC workflows beyond detection:
 
 ## Data Flow
 
-```
-Azure AD --> Diagnostic Settings --> Log Analytics --> Sentinel Rules --> Incidents
-Endpoints --> Wazuh Agents --> Wazuh Manager --> Custom Rules --> Alerts
-Incidents + Alerts --> Analyst Triage --> Enrichment/Automation --> Response
+```mermaid
+flowchart TD
+    A[Azure AD] --> B[Diagnostic Settings]
+    B --> C[Log Analytics]
+    C --> D[Sentinel Rules]
+    D --> E[Incidents]
+
+    F[Endpoints] --> G[Wazuh Agents]
+    G --> H[Wazuh Manager]
+    H --> I[Custom Rules]
+    I --> J[Alerts]
+
+    E & J --> K[Analyst Triage]
+    K --> L[Enrichment / Automation]
+    L --> M[Response]
+
+    classDef blue fill:#d4eaf7,stroke:#5a9fd4,color:#1a3a5c
+    classDef green fill:#d4f0e2,stroke:#5ab882,color:#1a3d2b
+    classDef amber fill:#f5e8d4,stroke:#c89050,color:#3d2a1a
+    classDef neutral fill:#edebe7,stroke:#d0ccc5,color:#6a6760
+
+    class A,B,C,D,E blue
+    class F,G,H,I,J green
+    class L amber
+    class K,M neutral
 ```
 
 ## Design Decisions
